@@ -1,0 +1,80 @@
+flowchart TD
+    A[Start System] --> B{System Active?}
+    B -->|No| C[Motor Stop<br/>Voltage = 0]
+    B -->|Yes| D{Motor Feeding?}
+    
+    D -->|Yes| E[PID Controller Calculate<br/>Control Signal]
+    E --> F[Apply Voltage to Motor<br/>Based on Control Signal]
+    F --> G[Update Motor Physics<br/>- Angular Velocity<br/>- Current Angle<br/>- Current]
+    
+    D -->|No| H[Apply Brake Voltage<br/>If Still Rotating]
+    H --> G
+    
+    G --> I{Check Feed Dispensing<br/>Angular Velocity > 5?}
+    I -->|Yes| J[Calculate Feed Rate<br/>Based on RPM]
+    J --> K[Dispense Feed Particles<br/>at Motor Outlet]
+    K --> L[Create Water Ripples]
+    
+    I -->|No| M[Update Feed Particles<br/>Physics & Lifetime]
+    L --> M
+    
+    M --> N[Update Fish Behavior]
+    N --> O{Fish State Check}
+    
+    O -->|Swimming| P[Random Movement<br/>Natural Bobbing]
+    O -->|Searching| Q[Look for Feed Particles<br/>Within Search Radius]
+    O -->|Chasing| R[Move Toward Target<br/>Particle at Chase Speed]
+    O -->|Eating| S[Remove Particle<br/>Set Eat Timer]
+    
+    P --> T[Fish Boundary Check<br/>Tank Limits]
+    Q --> U{Particle Found?}
+    U -->|Yes| V[Set Target Particle<br/>State = Chasing]
+    U -->|No| W[Continue Swimming]
+    V --> T
+    W --> T
+    R --> X{Close to Particle?}
+    X -->|Yes| Y[Eat Particle<br/>State = Eating]
+    X -->|No| Z[Continue Chasing]
+    Y --> T
+    Z --> T
+    S --> T
+    
+    T --> AA[Update Water Ripples<br/>Expand & Fade]
+    
+    AA --> BB{Motor Target Reached?}
+    BB -->|Yes| CC[Stop Motor<br/>Feed Complete = True<br/>Update Total Dispensed]
+    BB -->|No| DD[Continue Motor Operation]
+    
+    CC --> EE[Check Feed Level<br/>Refill if Low]
+    DD --> EE
+    
+    EE --> FF[Update System History<br/>- Angle History<br/>- RPM History<br/>- Target History]
+    
+    FF --> GG{New Feed Command?}
+    GG -->|Yes| HH[Calculate Required Rotations<br/>Set Target Angle<br/>Reset PID Controller]
+    HH --> II[Start Feeding Process<br/>Feed Complete = False]
+    
+    GG -->|No| JJ{Emergency Stop?}
+    JJ -->|Yes| KK[Force Stop Motor<br/>Reset All Parameters]
+    
+    JJ -->|No| LL{System Reset?}
+    LL -->|Yes| MM[Reset All Components<br/>- Motor<br/>- PID<br/>- Feeding System<br/>- Fish]
+    
+    LL -->|No| NN{PID Tune Command?}
+    NN -->|Yes| OO[Switch PID Parameters<br/>- Balanced<br/>- Underdamped<br/>- Overdamped]
+    
+    II --> B
+    KK --> B
+    MM --> B
+    OO --> B
+    NN -->|No| B
+    C --> B
+    
+    style A fill:#90EE90
+    style B fill:#FFE4B5
+    style E fill:#87CEEB
+    style J fill:#DDA0DD
+    style N fill:#F0E68C
+    style CC fill:#98FB98
+    style KK fill:#FFA07A
+    style MM fill:#FFB6C1

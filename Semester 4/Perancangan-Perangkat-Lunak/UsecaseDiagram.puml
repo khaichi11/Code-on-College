@@ -1,0 +1,26 @@
+@startuml
+left to right direction
+
+actor CarOwner as "Pemilik Mobil"
+actor SecurityService as "Layanan Keamanan"
+
+rectangle "Car Security System" {
+  usecase "Monitor Status Alarm" as UC1
+  usecase "Atur Ulang Alarm"          as UC2
+  usecase "Meminta Lokasi Kendaraan"    as UC3
+  usecase "Mengatur Waktu Pembaruan Lokasi GPS" as UC4
+  usecase "Menerima Peringatan Alarm" as UC5
+  usecase "Melacak Lokasi Kendaraan" as UC6
+}
+
+CarOwner       --> UC1
+CarOwner       --> UC2
+CarOwner       --> UC3
+CarOwner       --> UC4
+
+SecurityService --> UC5
+SecurityService --> UC6
+
+UC5 .> UC1 : <<includes>>
+UC6 .> UC3 : <<includes>>
+@enduml

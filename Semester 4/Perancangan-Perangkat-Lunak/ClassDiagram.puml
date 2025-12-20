@@ -1,0 +1,45 @@
+@startuml
+skinparam classAttributeIconSize 0
+class PemilikMobil {
+  - pemilikID: String
+  - nama: String
+  + monitorStatusAlarm(): void
+  + aturUlangAlarm(): void
+  + memintaLokasiKendaraan(): Location
+  + mengaturWaktuPembaruanLokasiGPS(interval: int): void
+}
+
+class LayananKeamanan {
+  - LayananID: String
+  - nama: String
+  + menerimaPeringatanAlarm(): void
+  + melacakLokasiKendaraan(): Location
+}
+
+class SistemAlarm {
+  - status: String
+  + mendapatkanStatus(): String
+  + aturUlang(): void
+  + peringatan(): void
+}
+
+class ModulGPS {
+  - lokasi: Location
+  - mengaturWaktuPembaruan: int
+  + mendapatkanLokasi(): Location
+  + aturIntervalPembaruan(interval: int): void
+}
+
+class Lokasi {
+  - lintang: double
+  - bujur: double
+  + toString(): String
+}
+
+PemilikMobil --> SistemAlarm : uses
+PemilikMobil --> ModulGPS : uses
+LayananKeamanan --> SistemAlarm : monitors
+LayananKeamanan --> ModulGPS : tracks
+
+ModulGPS --> Lokasi
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+actor User
+participant "Aplikasi Car Security" as App
+participant "Modul GPS" as GPS
+participant "Sistem Alarm" as Alarm
+
+User -> App : memintaLokasiKendaraan()
+App -> GPS : mendapatkanLokasi()
+GPS --> App : return Location
+App --> User : show Location
+
+User -> App : aturUlangAlarm()
+App -> Alarm : aturUlang()
+Alarm --> App : konfirmasiAturUlang
+App --> User : show aturUlang sukses
+@enduml
